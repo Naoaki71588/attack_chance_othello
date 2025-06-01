@@ -1,0 +1,29 @@
+    def highlight_opponent_stones(self, screen):
+        """
+        相手の石をハイライト表示
+        
+        Args:
+            screen (pygame.Surface): 描画先の画面
+        """
+        if not self.game_manager.board:
+            return
+            
+        board = self.game_manager.board
+        current_player = self.game_manager.get_current_player()
+        opponent_id = 1 - current_player.player_id
+        
+        # ハイライトの色（半透明の黄色）
+        highlight_color = (255, 255, 0, 128)
+        
+        for row in range(BOARD_SIZE):
+            for col in range(BOARD_SIZE):
+                if board.grid[row][col] == opponent_id:
+                    # 相手の石の中心座標
+                    center_x = self.board_x + (col + 0.5) * self.cell_size
+                    center_y = self.board_y + (row + 0.5) * self.cell_size
+                    radius = self.cell_size * 0.45
+                    
+                    # 半透明の円を描画
+                    s = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
+                    pygame.draw.circle(s, highlight_color, (radius, radius), radius)
+                    screen.blit(s, (center_x - radius, center_y - radius))
